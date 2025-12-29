@@ -1,0 +1,761 @@
+
+<!-- =========================
+ TOP SEARCH BAR
+========================= -->
+<header class="topbar">
+
+    <!-- SEARCH -->
+   <div class="indeed-search">
+
+  <div class="indeed-field">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="11" cy="11" r="7"></circle>
+      <path d="M20 20l-3.5-3.5"></path>
+    </svg>
+    <input type="text" id="jobKeyword" placeholder="Job title, keywords, or company">
+  </div>
+
+  <div class="indeed-divider"></div>
+
+  <div class="indeed-field">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 21s7-7.4 7-12a7 7 0 1 0-14 0c0 4.6 7 12 7 12z"></path>
+      <circle cx="12" cy="9" r="2.5"></circle>
+    </svg>
+    <input type="text" id="jobLocation" placeholder="City, country">
+  </div>
+
+  <button class="indeed-btn" id="jobSearchBtn">Find jobs</button>
+
+</div>
+
+
+<!-- TOPBAR UTILITIES -->
+<div class="topbar-utils">
+
+    <!-- THEME TOGGLE -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <svg class="icon-sun" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"/>
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+        </svg>
+    </button>
+
+ <!-- LANGUAGE BUTTON -->
+<div class="lang-switcher" id="langToggle">
+    <span class="lang-code">EN</span>
+
+    <div class="lang-menu">
+        <button data-lang="en">English</button>
+        <button data-lang="ar">العربية</button>
+        <button data-lang="fr">Français</button>
+    </div>
+</div>
+
+
+
+
+    <!-- PROFILE -->
+    <div class="profile-wrapper" id="profileToggle">
+
+      <a href="jobseeker-profile/" id='jobseeker-profile' class="profile-avatar-link">
+   <div class="profile-avatar">
+  <img id="topbarAvatar" alt="Profile avatar">
+  <span id="topbarAvatarFallback">A</span>
+</div>
+</a>
+
+
+        <svg class="caret" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 9l6 6 6-6"/>
+        </svg>
+
+        <div class="profile-dropdown" id="profileDropdown">
+            <div class="profile-info">
+                <strong id="userName">Ali Riyadh</strong>
+                <span id="userEmail">ali@email.com</span>
+                <span class="user-role" id="userRole">Jobseeker</span>
+            </div>
+
+            <div class="dropdown-divider"></div>
+
+            <a href="/settings">Settings</a>
+            <a href="/support">Support</a>
+
+            <div class="dropdown-divider"></div>
+
+            <a href="/wp-login.php?action=logout" class="logout">Log out</a>
+        </div>
+
+    </div>
+
+</header>
+
+<div class="jobs-layout">
+
+    <!-- LEFT: JOB LIST -->
+    <section class="job-list">
+
+        <h2 class="section-title">Jobs for you</h2>
+        
+        [job_listings]
+
+
+
+    </section>
+
+    <!-- RIGHT: JOB DETAILS -->
+    <aside class="job-details" id="jobDetails">
+
+    <h2 class="details-title" id="detailsTitle">Select a job</h2>
+    <a class="details-company" id="detailsCompany" href="#" target="_blank"></a>
+
+    <p class="details-location" id="detailsLocation">—</p>
+    <p class="details-pay" id="detailsPay">—</p>
+
+    <div class="details-actions">
+        <button class="apply-btn" id="applyBtn" data-job-id="">
+    Apply now
+</button>
+
+        <button class="icon-btn">🔖</button>
+        <button class="icon-btn">🚫</button>
+        <button class="icon-btn">🔗</button>
+    </div>
+
+    <hr>
+
+    <h3>Job details</h3>
+
+    <div class="details-block">
+        <strong>Job type</strong>
+        <span id="detailsType">—</span>
+    </div>
+    
+    <div class="details-description" id="detailsDescription">
+    <p>Select a job to view description.</p>
+</div>
+
+</aside>
+
+
+</div>
+
+
+
+
+
+
+
+<!-- =========================
+  PROFESSIONAL SIDEBAR
+========================= -->
+<aside class="sidebar">
+
+    <!-- LOGO -->
+    <div class="sidebar-logo">
+        <a href="/">
+            <img src="https://acuc.jobs/wp-content/uploads/2025/12/cropped-ACUC-Fav-ICON.png">
+        </a>
+    </div>
+
+    <!-- NAV -->
+    <nav class="sidebar-nav">
+
+        <!-- HOME -->
+        <a id="roleHomeLink" class="nav-link active" aria-label="Home">
+            <svg viewBox="0 0 24 24">
+                <path d="M3 11L12 3l9 8v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>
+            </svg>
+        </a>
+
+        <!-- CREATE CV (JOBSEEKER) -->
+        <div class="nav-link cv-menu-trigger" id="cvMenuTrigger" aria-label="CV options">
+    <svg viewBox="0 0 24 24">
+        <path d="M12 5v14M5 12h14" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+
+    <!-- CV MENU -->
+    <div class="cv-menu" id="cvMenu">
+        <a href="/create-cv" class="cv-menu-item">Create CV</a>
+        <a href="/my-cv" class="cv-menu-item">My CVs</a>
+    </div>
+</div>
+
+
+        <!-- NOTIFICATIONS -->
+<div class="notif-wrapper">
+  <button id="notifBtn" type="button" class="icon-btn">
+    🔔
+    <span id="notifBadge" class="notif-badge" style="display:none">0</span>
+  </button>
+
+  <div id="notifDropdown" class="notif-dropdown" hidden>
+    <div class="notif-header">Notifications</div>
+    <ul id="notifList"></ul>
+    <button id="notifMarkAll" class="notif-clear">Mark all as read</button>
+  </div>
+</div>
+        
+
+        <!-- MESSAGES -->
+        <a href="/messages" class="nav-link" aria-label="Messages">
+            <svg viewBox="0 0 24 24">
+                <path d="M21 15a4 4 0 0 1-4 4H7l-4 4V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/>
+            </svg>
+        </a>
+
+    </nav>
+
+    <!-- FOOTER -->
+    <div class="sidebar-footer">
+        <a href="/settings" class="nav-link" aria-label="Settings & Support">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 15.5A3.5 3.5 0 1 0 12 8.5a3.5 3.5 0 0 0 0 7z"/>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 5 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 5 8.49a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 5a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09A1.65 1.65 0 0 0 15 5a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19 9c.36 0 .7.12 1 .32"/>
+            </svg>
+        </a>
+    </div>
+
+</aside>
+
+
+
+
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const cards = document.querySelectorAll(".job-card");
+
+    const title       = document.getElementById("detailsTitle");
+    const company     = document.getElementById("detailsCompany");
+    const location    = document.getElementById("detailsLocation");
+    const pay         = document.getElementById("detailsPay");
+    const type        = document.getElementById("detailsType");
+    const description = document.getElementById("detailsDescription");
+    const applyBtn    = document.getElementById("applyBtn");
+
+    cards.forEach(card => {
+        card.addEventListener("click", () => {
+
+            cards.forEach(c => c.classList.remove("active"));
+            card.classList.add("active");
+
+            title.textContent       = card.dataset.title || "—";
+            company.textContent     = card.dataset.company || "—";
+            location.textContent    = card.dataset.location || "—";
+            pay.textContent         = card.dataset.salary || "—";
+            type.textContent        = card.dataset.type || "—";
+            description.innerHTML =
+    (card.dataset.description || "No description provided.")
+        .replace(/\n/g, "<br>");
+
+                
+                applyBtn.dataset.jobId = card.dataset.jobId;
+
+            applyBtn.disabled = false;
+        });
+    });
+
+});
+</script>
+
+
+
+
+<script>
+/* PROFILE DROPDOWN */
+const profileToggle = document.getElementById("profileToggle");
+const dropdown = document.getElementById("profileDropdown");
+
+profileToggle.addEventListener("click", (e) => {
+
+    // If user clicked the avatar link, allow navigation
+    if (e.target.closest(".profile-avatar-link")) {
+        return;
+    }
+
+    e.stopPropagation();
+    dropdown.style.display =
+        dropdown.style.display === "block" ? "none" : "block";
+});
+
+
+document.addEventListener("click", () => {
+    dropdown.style.display = "none";
+});
+</script>
+
+
+<script>
+src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+</script>
+
+<script>
+const locationInput = document.getElementById("locationInput");
+
+const autocomplete = new google.maps.places.Autocomplete(locationInput, {
+    types: ["(cities)"],
+});
+
+autocomplete.addListener("place_changed", () => {
+    const place = autocomplete.getPlace();
+    if (!place.geometry) {
+        locationInput.value = "";
+    }
+});
+</script>
+
+
+<script>
+const toggle = document.getElementById("themeToggle");
+
+toggle.addEventListener("click", () => {
+    document.body.classList.toggle("dark-mode");
+    localStorage.setItem(
+        "theme",
+        document.body.classList.contains("dark-mode") ? "dark" : "light"
+    );
+});
+
+if (localStorage.getItem("theme") === "dark") {
+    document.body.classList.add("dark-mode");
+}
+</script>
+
+
+<script>
+const langToggle = document.getElementById("langToggle");
+const langMenu = langToggle.querySelector(".lang-menu");
+
+langToggle.addEventListener("click", (e) => {
+    e.stopPropagation();
+    langMenu.style.display =
+        langMenu.style.display === "block" ? "none" : "block";
+});
+
+document.addEventListener("click", () => {
+    langMenu.style.display = "none";
+});
+
+/* Language selection (stub for backend / WPML / Polylang) */
+langMenu.querySelectorAll("button").forEach(btn => {
+    btn.addEventListener("click", () => {
+        const lang = btn.dataset.lang;
+        document.querySelector(".lang-code").textContent = lang.toUpperCase();
+
+        // TODO: hook into WP language switcher
+        // window.location.href = `?lang=${lang}`;
+    });
+});
+</script>
+
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const trigger = document.getElementById("cvMenuTrigger");
+    const menu = document.getElementById("cvMenu");
+
+    if (!trigger || !menu) return;
+
+    trigger.addEventListener("click", (e) => {
+        e.stopPropagation();
+        menu.style.display = menu.style.display === "block" ? "none" : "block";
+    });
+
+    document.addEventListener("click", () => {
+        menu.style.display = "none";
+    });
+
+});
+</script>
+
+<script>
+function bindJobCards() {
+
+  const cards = document.querySelectorAll(".job-card");
+
+  const title       = document.getElementById("detailsTitle");
+  const company     = document.getElementById("detailsCompany");
+  const location    = document.getElementById("detailsLocation");
+  const pay         = document.getElementById("detailsPay");
+  const type        = document.getElementById("detailsType");
+  const description = document.getElementById("detailsDescription");
+  const applyBtn    = document.getElementById("applyBtn");
+
+  if (!cards.length) return;
+
+  cards.forEach(card => {
+    card.addEventListener("click", () => {
+
+      cards.forEach(c => c.classList.remove("active"));
+      card.classList.add("active");
+
+      title.textContent       = card.dataset.title || "—";
+      company.textContent     = card.dataset.company || "—";
+      location.textContent    = card.dataset.location || "—";
+      pay.textContent         = card.dataset.salary || "—";
+      type.textContent        = card.dataset.type || "—";
+      description.textContent =
+        card.dataset.description || "No description provided.";
+        
+        if (card.dataset.companyProfile) {
+  company.href = card.dataset.companyProfile;
+}
+
+      /* ✅ THIS LINE WAS MISSING */
+      applyBtn.dataset.jobId = card.dataset.jobId;
+
+      applyBtn.disabled = false;
+    });
+  });
+}
+
+/* INITIAL LOAD */
+document.addEventListener("DOMContentLoaded", bindJobCards);
+</script>
+
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const keywordInput  = document.getElementById("jobKeyword");
+  const locationInput = document.getElementById("jobLocation");
+  const jobList       = document.querySelector(".job-list");
+
+  if (!keywordInput || !locationInput || !jobList) return;
+
+  let debounceTimer = null;
+  let lastQuery     = "";
+
+  function fetchJobs() {
+
+    const keyword  = keywordInput.value.trim();
+    const location = locationInput.value.trim();
+
+    const currentQuery = `${keyword}|${location}`;
+
+    // Prevent duplicate requests
+    if (currentQuery === lastQuery) return;
+    lastQuery = currentQuery;
+
+    const formData = new FormData();
+    formData.append("action", "acuc_search_jobs");
+    formData.append("keyword", keyword);
+    formData.append("location", location);
+
+    fetch(ACUC.ajaxUrl, {
+      method: "POST",
+      credentials: "same-origin",
+      body: formData
+    })
+    .then(res => res.text())
+    .then(html => {
+      jobList.innerHTML = `
+        <h2 class="section-title">Jobs for you</h2>
+        ${html}
+      `;
+
+      // Rebind job card click handlers
+      bindJobCards();
+    });
+  }
+
+  function debounceSearch() {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(fetchJobs, 300); // 300ms = sweet spot
+  }
+
+  keywordInput.addEventListener("input", debounceSearch);
+  locationInput.addEventListener("input", debounceSearch);
+
+});
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const applyBtn = document.getElementById("applyBtn");
+
+  applyBtn.addEventListener("click", () => {
+
+    const jobId = applyBtn.dataset.jobId;
+
+    if (!jobId) {
+      alert("Please select a job first.");
+      return;
+    }
+
+    const url = `/application-form?job_id=${jobId}`;
+
+    window.open(
+      url,
+      "applyWindow",
+      "width=900,height=700,scrollbars=yes"
+    );
+
+  });
+
+});
+</script>
+
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  if (!window.ACUC || !ACUC.ajaxUrl) return;
+
+  const avatarImg      = document.getElementById("topbarAvatar");
+  const avatarFallback = document.getElementById("topbarAvatarFallback");
+  const nameEl         = document.getElementById("userName");
+  const emailEl        = document.getElementById("userEmail");
+  const roleEl         = document.getElementById("userRole");
+
+  if (!avatarImg || !avatarFallback) return;
+
+  const fd = new FormData();
+  fd.append("action", "acuc_get_topbar_user");
+
+  fetch(ACUC.ajaxUrl, { method: "POST", body: fd })
+    .then(res => res.json())
+    .then(json => {
+      if (!json.success || !json.data) return;
+
+      const d = json.data;
+
+      /* ===== AVATAR ===== */
+      if (d.avatar_url) {
+        avatarImg.onload = () => {
+          avatarImg.classList.add("loaded");
+          avatarFallback.style.display = "none";
+        };
+        avatarImg.src = d.avatar_url;
+      } else {
+        avatarFallback.textContent = (d.name || "A")
+          .charAt(0)
+          .toUpperCase();
+      }
+
+      /* ===== USER INFO ===== */
+      if (nameEl)  nameEl.textContent  = d.name  || "";
+      if (emailEl) emailEl.textContent = d.email || "";
+      if (roleEl)  roleEl.textContent  = d.role  || "";
+    })
+    .catch(() => {
+      console.warn("Failed to load topbar user");
+    });
+
+});
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  if (!window.ACUC || !ACUC.ajaxUrl || !ACUC.nonce) return;
+
+  const btn      = document.getElementById("notificationBtn");
+  const badge    = document.getElementById("notificationCount");
+  const dropdown = document.getElementById("notificationDropdown");
+  const list     = document.getElementById("notificationList");
+  const markAll  = document.getElementById("markAllReadBtn");
+
+  if (!btn || !badge || !dropdown || !list) return;
+
+  let open = false;
+
+  /* ===============================
+     Render notifications
+  =============================== */
+  function render(items, unread) {
+
+    badge.textContent = unread;
+    badge.hidden = unread === 0;
+
+    if (!items.length) {
+      list.innerHTML = `<div class="notification-empty">No notifications</div>`;
+      return;
+    }
+
+    list.innerHTML = "";
+
+    items.forEach(n => {
+
+      const div = document.createElement("div");
+      div.className = "notification-item" + (n.read ? "" : " unread");
+      div.dataset.id = n.id;
+
+      let text = "";
+      if (n.type === "application_status") {
+        text = n.status === "accepted"
+          ? `✅ Accepted for <strong>${n.job_title}</strong>`
+          : `❌ Declined for <strong>${n.job_title}</strong>`;
+      } else {
+        text = n.message || "Notification";
+      }
+
+      div.innerHTML = `
+        <div class="notification-text">${text}</div>
+        <small>${new Date(n.time * 1000).toLocaleString()}</small>
+      `;
+
+      div.onclick = () => {
+        if (n.job_id) {
+          window.location.href = `/jobseeker-homepage?job_id=${n.job_id}`;
+        }
+      };
+
+      list.appendChild(div);
+    });
+  }
+
+  /* ===============================
+     Fetch notifications
+  =============================== */
+  function fetchNotifications() {
+    fetch(ACUC.ajaxUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        action: "acuc_get_notifications",
+        nonce: ACUC.nonce
+      })
+    })
+    .then(r => r.json())
+    .then(res => {
+      if (res.success) {
+        render(res.data.items, res.data.unread);
+      }
+    });
+  }
+
+  /* ===============================
+     Toggle dropdown
+  =============================== */
+  btn.addEventListener("click", e => {
+    e.stopPropagation();
+    open = !open;
+    dropdown.hidden = !open;
+
+    if (open) fetchNotifications();
+  });
+
+  document.addEventListener("click", () => {
+    dropdown.hidden = true;
+    open = false;
+  });
+
+  /* ===============================
+     Mark all as read
+  =============================== */
+  markAll?.addEventListener("click", () => {
+    fetch(ACUC.ajaxUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        action: "acuc_mark_notifications_read",
+        nonce: ACUC.nonce
+      })
+    }).then(fetchNotifications);
+  });
+
+  /* ===============================
+     Initial + live polling
+  =============================== */
+  fetchNotifications();
+  setInterval(fetchNotifications, 30000);
+
+});
+</script>
+
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const btn      = document.getElementById("notifBtn");
+  const dropdown = document.getElementById("notifDropdown");
+  const list     = document.getElementById("notifList");
+  const badge    = document.getElementById("notifBadge");
+  const markAll  = document.getElementById("notifMarkAll");
+
+  if (!btn) return;
+
+  btn.addEventListener("click", async (e) => {
+    e.preventDefault();               // ⛔ stops reload
+    dropdown.hidden = !dropdown.hidden;
+
+    if (!dropdown.hidden) {
+      await loadNotifications();
+    }
+  });
+
+  async function loadNotifications() {
+    const res = await fetch(ACUC.ajaxUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        action: "acuc_get_notifications"
+      })
+    });
+
+    const json = await res.json();
+    if (!json.success) return;
+
+    const { count, items } = json.data;
+
+    badge.style.display = count > 0 ? "inline-block" : "none";
+    badge.textContent   = count;
+
+    list.innerHTML = "";
+
+    if (!items.length) {
+      list.innerHTML = "<li class='muted'>No notifications</li>";
+      return;
+    }
+
+    items.forEach(n => {
+      const li = document.createElement("li");
+      li.className = n.read ? "" : "unread";
+      li.textContent = n.message || "Notification";
+      list.appendChild(li);
+    });
+  }
+
+  markAll?.addEventListener("click", async () => {
+    await fetch(ACUC.ajaxUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        action: "acuc_mark_notifications_read"
+      })
+    });
+
+    dropdown.hidden = true;
+    badge.style.display = "none";
+  });
+
+  // Close when clicking outside
+  document.addEventListener("click", (e) => {
+    if (!btn.contains(e.target) && !dropdown.contains(e.target)) {
+      dropdown.hidden = true;
+    }
+  });
+
+});
+</script>
+
+
+
