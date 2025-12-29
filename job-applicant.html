@@ -1,0 +1,308 @@
+<div class="applicants-dashboard">
+
+  <!-- HEADER / ACTION BAR -->
+  <div class="applicants-toolbar">
+    <h2 id="jobApplicantsTitle">Applicants</h2>
+
+    <div class="toolbar-right" style="display:flex; gap:10px; align-items:center;">
+        
+        <!-- Search -->
+      <input
+        type="text"
+        id="searchApplicants"
+        placeholder="Search applicant…"
+        style="height:36px;padding:0 12px;border-radius:8px;border:1px solid #e5e7eb;font-size:14px;min-width:200px;"
+      />
+      
+      <!-- Status Filter -->
+      <select id="statusFilter">
+        <option value="all">All applicants</option>
+        <option value="pending">Pending</option>
+        <option value="accepted">Accepted</option>
+        <option value="declined">Declined</option>
+      </select>
+
+
+      <!-- Sort -->
+      <select id="sortApplicants">
+        <option value="date_desc">Newest first</option>
+        <option value="date_asc">Oldest first</option>
+        <option value="name_asc">Name A–Z</option>
+        <option value="name_desc">Name Z–A</option>
+      </select>
+
+    </div>
+    
+    
+  </div>
+
+  <!-- BULK ACTIONS -->
+  <div class="table-actions">
+    <div class="table-actions-left">
+      <span class="table-selection-hint">Select applicants to take action</span>
+    </div>
+    <div class="table-actions-right">
+      <button id="bulkAccept" class="btn-success" disabled>Accept</button>
+      <button id="bulkDecline" class="btn-warning" disabled>Decline</button>
+      <button id="bulkDelete" class="btn-danger" disabled>Delete</button>
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="applicants-table-wrapper">
+    <table class="applicants-table">
+      <thead>
+        <tr>
+          <th><input type="checkbox" id="selectAll"></th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>CV</th>
+          <th>Status</th>
+        <th>Applied</th>
+        <th>Actions</th>
+
+        </tr>
+      </thead>
+      <tbody id="applicantTableBody">
+        <tr>
+          <td colspan="6" class="muted">Loading applicants…</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  /* -------------------------
+     Utilities
+  ------------------------- */
+  function debounce(fn, delay = 300) {
+    let t;
+    return (...args) => {
+      clearTimeout(t);
+      t = setTimeout(() => fn.apply(null, args), delay);
+    };
+  }
+
+  /* -------------------------
+     Elements
+  ------------------------- */
+  const tbody        = document.getElementById("applicantTableBody");
+  const selectAll    = document.getElementById("selectAll");
+  const bulkAccept   = document.getElementById("bulkAccept");
+  const bulkDecline  = document.getElementById("bulkDecline");
+  const bulkDelete   = document.getElementById("bulkDelete");
+  const sortSelect   = document.getElementById("sortApplicants");
+  const statusFilter = document.getElementById("statusFilter");
+  const searchInput  = document.getElementById("searchApplicants");
+
+  const jobId = new URLSearchParams(window.location.search).get("job_id");
+
+  let applicantsData = [];
+  let activeStatus = "all";
+  let activeSearch = "";
+
+  if (!jobId) {
+    tbody.innerHTML = "<tr><td colspan='7' class='muted'>No job selected.</td></tr>";
+    return;
+  }
+
+  /* -------------------------
+     Title
+  ------------------------- */
+  fetch(ACUC.ajaxUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      action: "acuc_get_job_meta",
+      nonce: ACUC.nonce,
+      job_id: jobId
+    })
+  })
+  .then(r => r.json())
+  .then(res => {
+    if (res.success) {
+      document.getElementById("jobApplicantsTitle").textContent =
+        `Applicants — ${res.data.title} (${res.data.location || "—"})`;
+    }
+  });
+
+  /* -------------------------
+     Rendering
+  ------------------------- */
+  function renderApplicants(data) {
+    tbody.innerHTML = "";
+
+    if (!data.length) {
+      tbody.innerHTML = "<tr><td colspan='6' class='muted'>No matching applicants.</td></tr>";
+      return;
+    }
+
+    data.forEach(app => {
+     const status = app.status || "pending";
+
+const tr = document.createElement("tr");
+tr.innerHTML = `
+  <td>
+    <input type="checkbox" class="rowCheck" data-user="${app.user_id}">
+  </td>
+
+  <td>
+    <div class="applicant-name">
+      <img src="${app.avatar || 'https://www.gravatar.com/avatar/?d=mp&s=48'}"
+           class="mini-avatar">
+      <span>${app.name}</span>
+    </div>
+  </td>
+
+  <td>${app.email}</td>
+
+  <td>
+    <a class="action-btn" href="${app.cv_download}" target="_blank">Download</a>
+  </td>
+
+  <td>
+    <span class="status-pill ${status}">
+      ${status === "accepted" ? "Accepted" :
+        status === "declined" ? "Rejected" : "Pending"}
+    </span>
+  </td>
+
+  <td>${app.applied_at}</td>
+
+  <td>
+    <button class="action-btn view-profile" data-user="${app.user_id}">
+      Profile
+    </button>
+    <button class="action-btn message-user" data-user="${app.user_id}">
+      Message
+    </button>
+  </td>
+`;
+
+      tbody.appendChild(tr);
+    });
+
+    updateBulkButtons();
+  }
+
+  /* -------------------------
+     Filters (central)
+  ------------------------- */
+  function applyFilters() {
+    let data = [...applicantsData];
+
+    if (activeStatus !== "all") {
+      data = data.filter(a => a.status === activeStatus);
+    }
+
+    if (activeSearch) {
+      const q = activeSearch.toLowerCase();
+      data = data.filter(a =>
+        (a.name && a.name.toLowerCase().includes(q)) ||
+        (a.email && a.email.toLowerCase().includes(q))
+      );
+    }
+
+    renderApplicants(data);
+  }
+
+  /* -------------------------
+     Fetch applicants
+  ------------------------- */
+  fetch(ACUC.ajaxUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      action: "acuc_get_job_applicants",
+      nonce: ACUC.nonce,
+      job_id: jobId
+    })
+  })
+  .then(r => r.json())
+  .then(res => {
+    applicantsData = res.success ? res.data : [];
+    applyFilters();
+  });
+
+  /* -------------------------
+     Events
+  ------------------------- */
+  statusFilter.addEventListener("change", e => {
+    activeStatus = e.target.value;
+    applyFilters();
+  });
+
+  const debouncedSearch = debounce(value => {
+    activeSearch = value.trim();
+    applyFilters();
+  });
+
+  searchInput.addEventListener("input", e => {
+    debouncedSearch(e.target.value);
+  });
+
+  sortSelect.addEventListener("change", e => {
+    const v = e.target.value;
+    applicantsData.sort((a, b) => {
+      if (v === "name_asc")  return a.name.localeCompare(b.name);
+      if (v === "name_desc") return b.name.localeCompare(a.name);
+      if (v === "date_asc")  return a.applied_ts - b.applied_ts;
+      return b.applied_ts - a.applied_ts;
+    });
+    applyFilters();
+  });
+
+  selectAll.addEventListener("change", () => {
+    document.querySelectorAll(".rowCheck").forEach(cb => cb.checked = selectAll.checked);
+    updateBulkButtons();
+  });
+
+  document.addEventListener("change", e => {
+    if (e.target.classList.contains("rowCheck")) updateBulkButtons();
+  });
+
+  function updateBulkButtons() {
+    const any = document.querySelectorAll(".rowCheck:checked").length > 0;
+    bulkAccept.disabled = bulkDecline.disabled = bulkDelete.disabled = !any;
+  }
+
+  function getSelectedUsers() {
+    return [...document.querySelectorAll(".rowCheck:checked")].map(cb => cb.dataset.user);
+  }
+
+  function bulkAction(type) {
+    fetch(ACUC.ajaxUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        action: "acuc_bulk_applicant_action",
+        nonce: ACUC.nonce,
+        job_id: jobId,
+        bulk_action: type,
+        users: getSelectedUsers()
+      })
+    }).then(() => location.reload());
+  }
+
+  bulkAccept.onclick  = () => bulkAction("accepted");
+  bulkDecline.onclick = () => bulkAction("declined");
+
+  document.addEventListener("click", e => {
+    const profileBtn = e.target.closest(".view-profile");
+    if (profileBtn) {
+      window.location.href =
+        `/jobseeker-profile?user_id=${profileBtn.dataset.user}&job_id=${jobId}`;
+    }
+
+    const msgBtn = e.target.closest(".message-user");
+    if (msgBtn) {
+      window.location.href = `/messages?user_id=${msgBtn.dataset.user}`;
+    }
+  });
+
+});
+</script>
